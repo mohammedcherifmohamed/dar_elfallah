@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>مكتبة الفلاح للكتب الشرعية</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.3/cdn.min.js" defer></script>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --crimson:    #800020;
+      --deep:       #5a0016;
+      --parchment:  #f5f0e8;
+      --ink:        #241b0c;
+      --gold:       #c8a84b;
+      --gold-light: #e8d5a3;
+      --cream:      #fdf8f0;
+      --warm-gray:  #6b5c47;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* ─── NAVBAR ─── */
+    .navbar {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--deep);
+      box-shadow: 0 2px 20px rgba(90,0,22,.5);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 0 24px; height: 70px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 44px; height: 44px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 0 0 3px rgba(200,168,75,.3);
+    }
+    .logo-text { color: #fff; }
+    .logo-text .name { font-size: 18px; font-weight: 700; line-height: 1.1; }
+    .logo-text .sub { font-size: 11px; color: var(--gold-light); letter-spacing: .5px; }
+
+    .nav-links {
+      display: flex; gap: 28px; list-style: none;
+    }
+    .nav-links a {
+      color: var(--gold-light); text-decoration: none;
+      font-size: 14px; font-weight: 600;
+      transition: color .2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; right: 0;
+      width: 0; height: 2px; background: var(--gold);
+      transition: width .25s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-actions { display: flex; gap: 12px; align-items: center; }
+    .btn-search {
+      background: none; border: 1px solid rgba(200,168,75,.4);
+      color: var(--gold-light); border-radius: 20px;
+      padding: 6px 16px; font-family: 'Cairo', sans-serif;
+      font-size: 13px; cursor: pointer; transition: all .2s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .btn-search:hover { background: rgba(200,168,75,.15); border-color: var(--gold); }
+    .btn-cart {
+      background: var(--crimson); border: none;
+      color: #fff; border-radius: 20px;
+      padding: 8px 18px; font-family: 'Cairo', sans-serif;
+      font-size: 13px; cursor: pointer; transition: all .2s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .btn-cart:hover { background: var(--gold); color: var(--ink); }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative; overflow: hidden;
+      min-height: 580px;
+      display: flex; align-items: center;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--deep) 0%, var(--crimson) 55%, #a0002a 100%);
+    }
+    .hero-pattern {
+      position: absolute; inset: 0; opacity: .07;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-gold-arc {
+      position: absolute; left: -60px; top: -60px;
+      width: 400px; height: 400px; border-radius: 50%;
+      border: 80px solid rgba(200,168,75,.12);
+      pointer-events: none;
+    }
+    .hero-inner {
+      position: relative; z-index: 2;
+      max-width: 1280px; margin: 0 auto;
+      padding: 80px 24px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+      align-items: center;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(200,168,75,.2); border: 1px solid rgba(200,168,75,.5);
+      color: var(--gold-light); border-radius: 30px;
+      padding: 5px 16px; font-size: 12px; font-weight: 600;
+      margin-bottom: 20px; letter-spacing: 1px;
+    }
+    .hero-title {
+      font-family: 'Amiri', serif;
+      font-size: clamp(32px, 4vw, 56px); font-weight: 700;
+      color: #fff; line-height: 1.35;
+      margin-bottom: 16px;
+    }
+    .hero-title span { color: var(--gold); }
+    .hero-desc {
+      color: rgba(255,255,255,.75); font-size: 16px;
+      line-height: 1.8; margin-bottom: 32px;
+    }
+    .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--gold); color: var(--ink);
+      padding: 14px 32px; border-radius: 6px;
+      font-family: 'Cairo', sans-serif; font-size: 15px; font-weight: 700;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: all .25s; display: inline-flex; align-items: center; gap: 8px;
+      box-shadow: 0 4px 20px rgba(200,168,75,.4);
+    }
+    .btn-primary:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(200,168,75,.5); }
+    .btn-outline {
+      background: transparent; color: #fff;
+      padding: 14px 32px; border-radius: 6px;
+      font-family: 'Cairo', sans-serif; font-size: 15px; font-weight: 700;
+      text-decoration: none; border: 2px solid rgba(255,255,255,.4); cursor: pointer;
+      transition: all .25s; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,.1); }
+    .hero-stats {
+      display: flex; gap: 32px; margin-top: 40px; padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,.15);
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: 28px; font-weight: 900; color: var(--gold); line-height: 1; }
+    .stat-label { font-size: 12px; color: rgba(255,255,255,.6); margin-top: 4px; }
+
+    .hero-visual {
+      display: flex; align-items: center; justify-content: center;
+    }
+    .books-stack {
+      position: relative; width: 300px; height: 340px;
+    }
+    .book {
+      position: absolute; border-radius: 4px 8px 8px 4px;
+      box-shadow: 4px 4px 20px rgba(0,0,0,.4);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Amiri', serif; font-weight: 700;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      letter-spacing: 2px;
+      transition: transform .3s ease;
+    }
+    .book:nth-child(1) { width: 52px; height: 240px; background: #2c1810; color: var(--gold); left: 30px; top: 50px; transform: rotate(-5deg); font-size: 14px; }
+    .book:nth-child(2) { width: 48px; height: 280px; background: #5a0016; color: #e8d5a3; left: 90px; top: 20px; font-size: 12px; }
+    .book:nth-child(3) { width: 54px; height: 260px; background: #800020; color: #fff; left: 146px; top: 40px; transform: rotate(3deg); font-size: 13px; }
+    .book:nth-child(4) { width: 50px; height: 220px; background: #c8a84b; color: var(--ink); left: 206px; top: 60px; transform: rotate(-2deg); font-size: 12px; }
+    .books-stack:hover .book:nth-child(1) { transform: rotate(-8deg) translateX(-5px); }
+    .books-stack:hover .book:nth-child(3) { transform: rotate(6deg) translateX(5px); }
+
+    /* ─── MARQUEE STRIP ─── */
+    .marquee-strip {
+      background: var(--gold); overflow: hidden; white-space: nowrap;
+      padding: 10px 0;
+    }
+    .marquee-inner {
+      display: inline-flex; gap: 40px;
+      animation: marqueeRTL 25s linear infinite;
+    }
+    @keyframes marqueeRTL {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .marquee-item {
+      font-size: 13px; font-weight: 700; color: var(--ink);
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .marquee-dot { width: 6px; height: 6px; background: var(--crimson); border-radius: 50%; }
+
+    /* ─── SECTION COMMON ─── */
+    .section { max-width: 1280px; margin: 0 auto; padding: 80px 24px; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .eyebrow {
+      display: inline-block; color: var(--crimson); font-size: 13px;
+      font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Amiri', serif; font-size: clamp(26px, 3vw, 40px);
+      color: var(--ink); font-weight: 700; line-height: 1.35;
+    }
+    .section-title span { color: var(--crimson); }
+    .divider {
+      width: 60px; height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--crimson));
+      margin: 20px auto 0;
+      border-radius: 2px;
+    }
+
+    /* ─── CATEGORIES ─── */
+    .categories-bg { background: var(--parchment); }
+    .categories-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 24px;
+    }
+    .cat-card {
+      position: relative; overflow: hidden; border-radius: 12px;
+      aspect-ratio: 3/4;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(36,27,12,.15);
+      transform: translateY(40px); opacity: 0;
+      transition: transform .5s cubic-bezier(.22,.68,0,1.2), opacity .5s ease, box-shadow .3s;
+    }
+    .cat-card.visible { transform: translateY(0); opacity: 1; }
+    .cat-card:hover { box-shadow: 0 12px 40px rgba(36,27,12,.3); }
+    .cat-card img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .5s ease;
+      filter: brightness(.7);
+    }
+    .cat-card:hover img { transform: scale(1.07); filter: brightness(.5); }
+    .cat-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, var(--deep) 0%, rgba(90,0,22,.4) 50%, transparent 100%);
+      transition: opacity .3s;
+    }
+    .cat-card:hover .cat-overlay { opacity: .85; }
+    .cat-content {
+      position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 16px;
+    }
+    .cat-icon { font-size: 28px; margin-bottom: 8px; display: block; }
+    .cat-name {
+      font-family: 'Amiri', serif; font-size: 18px; font-weight: 700;
+      color: #fff; line-height: 1.3;
+    }
+    .cat-count {
+      font-size: 12px; color: var(--gold-light); margin-top: 4px;
+      opacity: 0; transform: translateY(6px);
+      transition: opacity .3s .05s, transform .3s .05s;
+    }
+    .cat-card:hover .cat-count { opacity: 1; transform: translateY(0); }
+    .cat-arrow {
+      position: absolute; top: 16px; left: 16px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--gold); color: var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; opacity: 0; transform: scale(.7);
+      transition: opacity .3s, transform .3s;
+    }
+    .cat-card:hover .cat-arrow { opacity: 1; transform: scale(1); }
+
+    /* ─── FEATURED BOOKS ─── */
+    .books-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 28px;
+    }
+    .book-card {
+      background: #fff; border-radius: 12px; overflow: hidden;
+      box-shadow: 0 2px 12px rgba(36,27,12,.08);
+      transition: transform .3s ease, box-shadow .3s ease;
+      cursor: pointer;
+    }
+    .book-card:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(36,27,12,.18); }
+    .book-cover {
+      position: relative; aspect-ratio: 3/4; overflow: hidden;
+      background: linear-gradient(135deg, var(--deep), var(--crimson));
+    }
+    .book-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .book-badge {
+      position: absolute; top: 10px; right: 10px;
+      background: var(--gold); color: var(--ink);
+      font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+    }
+    .book-badge.new { background: var(--crimson); color: #fff; }
+    .book-info { padding: 16px; }
+    .book-category { font-size: 11px; color: var(--crimson); font-weight: 700; margin-bottom: 6px; }
+    .book-title {
+      font-family: 'Amiri', serif; font-size: 16px; font-weight: 700;
+      color: var(--ink); line-height: 1.4; margin-bottom: 4px;
+    }
+    .book-author { font-size: 12px; color: var(--warm-gray); margin-bottom: 12px; }
+    .book-footer { display: flex; align-items: center; justify-content: space-between; }
+    .book-price { font-size: 16px; font-weight: 700; color: var(--crimson); }
+    .book-price .old { font-size: 12px; text-decoration: line-through; color: #aaa; margin-left: 6px; }
+    .btn-add {
+      background: var(--crimson); color: #fff; border: none;
+      width: 32px; height: 32px; border-radius: 50%;
+      font-size: 18px; cursor: pointer; transition: all .2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .btn-add:hover { background: var(--gold); color: var(--ink); transform: rotate(90deg); }
+
+    /* ─── PROMO BANNER ─── */
+    .promo-section { padding: 0 24px 80px; max-width: 1280px; margin: 0 auto; }
+    .promo-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+    .promo-card {
+      position: relative; border-radius: 16px; overflow: hidden;
+      padding: 48px 40px; min-height: 220px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .promo-card-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--deep) 0%, var(--crimson) 100%);
+    }
+    .promo-card-bg.gold {
+      background: linear-gradient(135deg, #3d2a00 0%, #c8a84b 100%);
+    }
+    .promo-pattern {
+      position: absolute; inset: 0; opacity: .06;
+      background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff'%3E%3Ccircle cx='20' cy='20' r='3'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .promo-content { position: relative; z-index: 2; }
+    .promo-tag {
+      display: inline-block; background: rgba(255,255,255,.2);
+      color: #fff; border-radius: 20px; padding: 4px 14px;
+      font-size: 12px; font-weight: 700; margin-bottom: 12px;
+    }
+    .promo-title {
+      font-family: 'Amiri', serif; font-size: 28px; font-weight: 700;
+      color: #fff; margin-bottom: 8px;
+    }
+    .promo-sub { color: rgba(255,255,255,.75); font-size: 14px; margin-bottom: 20px; }
+    .btn-promo {
+      background: #fff; color: var(--ink);
+      padding: 10px 24px; border-radius: 6px;
+      font-family: 'Cairo', sans-serif; font-size: 14px; font-weight: 700;
+      text-decoration: none; display: inline-block;
+      transition: all .2s;
+    }
+    .btn-promo:hover { background: var(--gold); }
+    .promo-emoji {
+      position: absolute; left: 32px; bottom: 20px;
+      font-size: 60px; opacity: .25;
+    }
+
+    /* ─── DELIVERY ─── */
+    .delivery-section { background: var(--ink); padding: 60px 0; }
+    .delivery-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    .delivery-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 40px; text-align: center;
+    }
+    .delivery-item {}
+    .delivery-icon {
+      width: 60px; height: 60px; background: rgba(200,168,75,.15);
+      border-radius: 50%; margin: 0 auto 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; border: 1px solid rgba(200,168,75,.3);
+    }
+    .delivery-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .delivery-desc { font-size: 13px; color: rgba(255,255,255,.5); }
+
+    /* ─── INSTAGRAM FEED ─── */
+    .insta-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .insta-card {
+      aspect-ratio: 1; border-radius: 10px; overflow: hidden;
+      background: var(--parchment); position: relative;
+      cursor: pointer;
+    }
+    .insta-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+    .insta-card:hover img { transform: scale(1.1); }
+    .insta-hover {
+      position: absolute; inset: 0; background: rgba(90,0,22,.6);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .3s; font-size: 24px;
+    }
+    .insta-card:hover .insta-hover { opacity: 1; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--deep); color: rgba(255,255,255,.7);
+      padding: 60px 24px 30px;
+    }
+    .footer-inner { max-width: 1280px; margin: 0 auto; }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px; margin-bottom: 48px;
+    }
+    .footer-brand .name {
+      font-family: 'Amiri', serif; font-size: 22px; color: #fff; margin-bottom: 12px;
+    }
+    .footer-brand p { font-size: 13px; line-height: 1.8; }
+    .footer-social { display: flex; gap: 10px; margin-top: 20px; }
+    .social-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,.08);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 14px; text-decoration: none;
+      transition: background .2s;
+    }
+    .social-btn:hover { background: var(--gold); color: var(--ink); }
+    .footer-col h4 { color: #fff; font-size: 15px; font-weight: 700; margin-bottom: 20px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 10px; }
+    .footer-col a { color: rgba(255,255,255,.6); text-decoration: none; font-size: 13px; transition: color .2s; }
+    .footer-col a:hover { color: var(--gold); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.1); padding-top: 24px;
+      text-align: center; font-size: 12px; color: rgba(255,255,255,.35);
+    }
+
+    /* ─── CART SIDEBAR ─── */
+    .cart-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.5);
+      z-index: 200; opacity: 0; pointer-events: none; transition: opacity .3s;
+    }
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+    .cart-sidebar {
+      position: fixed; top: 0; left: 0; /* RTL: left side */
+      width: 360px; height: 100vh;
+      background: #fff; z-index: 201;
+      transform: translateX(-100%); transition: transform .35s cubic-bezier(.22,.68,0,1.2);
+      display: flex; flex-direction: column;
+    }
+    .cart-sidebar.open { transform: translateX(0); }
+    .cart-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 24px; border-bottom: 1px solid #eee;
+    }
+    .cart-header h3 { font-size: 18px; font-weight: 700; }
+    .btn-close { background: none; border: none; font-size: 24px; cursor: pointer; }
+    .cart-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #aaa; }
+    .cart-empty span { font-size: 48px; margin-bottom: 12px; }
+    .cart-items { flex:1; overflow-y:auto; padding:16px 24px; }
+    .cart-item { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid #eee; }
+    .cart-item-img { width:50px; height:65px; border-radius:6px; background:var(--parchment); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; overflow:hidden; }
+    .cart-item-img img { width:100%; height:100%; object-fit:cover; }
+    .cart-item-info { flex:1; }
+    .cart-item-title { font-size:13px; font-weight:700; color:var(--ink); line-height:1.3; }
+    .cart-item-price { font-size:13px; color:var(--crimson); font-weight:700; margin-top:2px; }
+    .cart-item-qty { display:flex; align-items:center; gap:6px; }
+    .cart-item-qty button { width:26px; height:26px; border-radius:50%; border:1px solid #ddd; background:#fff; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; transition:all .15s; }
+    .cart-item-qty button:hover { background:var(--gold-light); border-color:var(--gold); }
+    .cart-item-qty span { font-size:14px; font-weight:700; min-width:20px; text-align:center; }
+    .cart-item-remove { background:none; border:none; font-size:16px; cursor:pointer; color:#ccc; transition:color .2s; padding:4px; }
+    .cart-item-remove:hover { color:var(--crimson); }
+    .cart-footer { border-top:1px solid #eee; padding:20px 24px; }
+    .cart-total { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+    .cart-total span:first-child { font-size:15px; font-weight:600; color:var(--ink); }
+    .cart-total-price { font-size:22px; font-weight:900; color:var(--crimson); }
+    .btn-checkout { width:100%; height:48px; border-radius:8px; background:var(--crimson); color:#fff; border:none; font-family:'Cairo',sans-serif; font-size:16px; font-weight:700; cursor:pointer; transition:all .25s; }
+    .btn-checkout:hover { background:var(--deep); }
+    .search-results { margin-top:16px; max-height:400px; overflow-y:auto; }
+    .search-result-item { display:flex; align-items:center; gap:12px; padding:12px 16px; border-radius:8px; cursor:pointer; transition:background .15s; }
+    .search-result-item:hover { background:rgba(255,255,255,.08); }
+    .search-result-img { width:40px; height:52px; border-radius:4px; background:var(--deep); flex-shrink:0; overflow:hidden; }
+    .search-result-img img { width:100%; height:100%; object-fit:cover; }
+    .search-result-info { flex:1; }
+    .search-result-title { font-size:14px; font-weight:700; color:#fff; }
+    .search-result-author { font-size:12px; color:rgba(255,255,255,.5); }
+    .search-result-price { font-size:13px; color:var(--gold); font-weight:700; }
+
+    /* ─── SEARCH MODAL ─── */
+    .search-modal {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(36,27,12,.9); backdrop-filter: blur(8px);
+      display: flex; align-items: flex-start; justify-content: center;
+      padding-top: 100px;
+      opacity: 0; pointer-events: none; transition: opacity .3s;
+    }
+    .search-modal.open { opacity: 1; pointer-events: all; }
+    .search-box {
+      width: 100%; max-width: 600px; padding: 0 24px;
+    }
+    .search-input-wrap {
+      position: relative; display: flex; align-items: center;
+    }
+    .search-input {
+      width: 100%; padding: 18px 56px 18px 20px;
+      border-radius: 8px; border: 2px solid var(--gold);
+      background: rgba(255,255,255,.05); color: #fff;
+      font-family: 'Cairo', sans-serif; font-size: 18px;
+      outline: none;
+    }
+    .search-input::placeholder { color: rgba(255,255,255,.4); }
+    .search-icon { position: absolute; left: 16px; font-size: 20px; color: var(--gold); }
+    .search-close { position: absolute; top: 16px; left: 16px; background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; }
+
+    /* Scroll animation */
+    .fade-in { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .promo-grid { grid-template-columns: 1fr; }
+      .delivery-grid { grid-template-columns: 1fr; }
+      .insta-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" onclick="closeClaudeCart()" style="opacity: 0; pointer-events: none;"></div>
+<div class="cart-sidebar" style="transform: translateX(-100%);">
+  <div class="cart-header">
+    <h3> سلة الشراء</h3>
+    <button class="btn-close" onclick="closeClaudeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="claudeCartItems"></div>
+  <div class="cart-footer" id="claudeCartFooter">
+    <div class="cart-total">
+      <span>المجموع</span>
+      <span class="cart-total-price" id="claudeCartTotal">0 دج</span>
+    </div>
+    <button class="btn-checkout" onclick="claudeCheckout()">إتمام الطلب</button>
+  </div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div class="search-modal" style="opacity: 0; pointer-events: none;">
+  <button class="search-close" onclick="closeClaudeSearch()">✕</button>
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input class="search-input" id="claudeSearchInput" placeholder="ابحث عن كتاب، مؤلف، تصنيف…" type="text" oninput="claudeSearch(this.value)" />
+      <span class="search-icon"></span>
+    </div>
+    <div class="search-results" id="claudeSearchResults"></div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon"> </div>
+      <div class="logo-text">
+        <div class="name">مكتبة الفلاح</div>
+        <div class="sub">للكتب الشرعية • الجزائر</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#categories">التصنيفات</a></li>
+      <li><a href="#featured">الكتب المميزة</a></li>
+      <li><a href="#offers">العروض</a></li>
+      <li><a href="#instagram">تواصل معنا</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-search" onclick="document.querySelector('.search-modal').classList.add('open'); document.getElementById('claudeSearchInput').focus();">
+         <span>بحث</span>
+      </button>
+      <button class="btn-cart">
+         <span>السلة (0)</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+  <div class="hero-gold-arc"></div>
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <span class="hero-badge"> مكتبة الفلاح للكتب الشرعية</span>
+      <h1 class="hero-title">هنا حيث<br><span>الكُتُب  </span><br>تجد طريقها إليك</h1>
+      <p class="hero-desc">
+        "الفلاح" متجركم لبيع الكتب الشرعية، نقدم أفضل المؤلفات للأئمة والعلماء.<br>
+        التوصيل داخل الجزائر فقط 🇩🇿
+      </p>
+      <div class="hero-cta">
+        <a href="#featured" class="btn-primary">  تسوق الآن</a>
+        <a href="#categories" class="btn-outline">  التصنيفات</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num">+500</div><div class="stat-label">كتاب متوفر</div></div>
+        <div class="stat"><div class="stat-num">26.5K</div><div class="stat-label">متابع</div></div>
+        <div class="stat"><div class="stat-num">58</div><div class="stat-label">ولاية تغطية</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="books-stack">
+        <div class="book">إغاثة اللهفان</div>
+        <div class="book">الداء والدواء</div>
+        <div class="book">زاد المعاد</div>
+        <div class="book">مدارج السالكين</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-inner">
+    <span class="marquee-item"><span class="marquee-dot"></span> توصيل لجميع ولايات الجزائر</span>
+    <span class="marquee-item"><span class="marquee-dot"></span> كتب ابن القيم رحمه الله</span>
+    <span class="marquee-item"><span class="marquee-dot"></span> كتب ابن تيمية رحمه الله</span>
+    <span class="marquee-item"><span class="marquee-dot"></span> أسعار تنافسية</span>
+    <span class="marquee-item"><span class="marquee-dot"></span> جودة مضمونة</span>
+    <span class="marquee-item"><span class="marquee-dot"></span> توصيل لجميع ولايات الجزائر</span>
+    <span class="marquee-item"><span class="marquee-dot"></span> كتب ابن القيم رحمه الله</span>
+    <span class="marquee-item"><span class="marquee-dot"></span> كتب ابن تيمية رحمه الله</span>
+    <span class="marquee-item"><span class="marquee-dot"></span> أسعار تنافسية</span>
+    <span class="marquee-item"><span class="marquee-dot"></span> جودة مضمونة</span>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="categories-bg" id="categories">
+  <div class="section">
+    <div class="section-header fade-in">
+      <h2 class="eyebrow">تصفح حسب الفئة</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="categories-grid">
+      <!-- Each card uses a colored gradient as bg since we can't load external images -->
+      <div class="cat-card" data-delay="0" onclick="window.location.href='claude.html?cat=%D8%A7%D9%84%D8%AA%D8%B2%D9%83%D9%8A%D8%A9+%D9%88%D8%A7%D9%84%D8%B1%D9%82%D8%A7%D8%A6%D9%82'">
+        <img src="sajad2.png" alt="">
+        <div class="cat-overlay"></div>
+        <div class="cat-arrow">↗</div>
+        <div class="cat-content">
+          <span class="cat-icon"> </span>
+          <div class="cat-name">سجادات صلاة</div>
+          <div class="cat-count">+2 كتاب</div>
+        </div>
+      </div>
+      <div class="cat-card" data-delay="100" onclick="window.location.href='claude.html?cat=%D8%A7%D9%84%D8%B9%D9%82%D9%8A%D8%AF%D8%A9+%D9%88%D8%A7%D9%84%D8%AA%D9%88%D8%AD%D9%8A%D8%AF'">
+        <img src="images.jfif" alt="">
+        <div class="cat-overlay"></div>
+        <div class="cat-arrow">↗</div>
+        <div class="cat-content">
+          <span class="cat-icon"> </span>
+          <div class="cat-name">العقيدة والتوحيد</div>
+          <div class="cat-count">+1 كتاب</div>
+        </div>
+      </div>
+      <div class="cat-card" data-delay="400" onclick="window.location.href='claude.html?cat=%D8%A7%D9%84%D8%B3%D9%8A%D8%B1%D8%A9+%D8%A7%D9%84%D9%86%D8%A8%D9%88%D9%8A%D8%A9'">
+        <img src="note.jpg" alt="">
+        <div class="cat-overlay"></div>
+        <div class="cat-arrow">↗</div>
+        <div class="cat-content">
+          <span class="cat-icon"> </span>
+          <div class="cat-name">السيرة النبوية</div>
+          <div class="cat-count">+1 كتاب</div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<!-- FEATURED BOOKS -->
+<div id="featured">
+  <div class="section">
+    <div class="section-header fade-in">
+      <span class="eyebrow">أبرز الإصدارات</span>
+      <h2 class="section-title">اختر ما يناسبك من <span>الكتب الشرعية</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="books-grid">
+
+      <div class="book-card fade-in" onclick="window.location.href='details.html?id=1'">
+        <div class="book-cover" style="background:linear-gradient(135deg,#2c1810,#800020);">
+          <img src="book1.jfif" alt="">
+          <span class="book-badge">مميز</span>
+        </div>
+        <div class="book-info">
+          <div class="book-category">سجادات صلاة</div>
+          <div class="book-title">إغاثة اللهفان من مصايد الشيطان</div>
+          <div class="book-author">ابن القيم الجوزية رحمه الله</div>
+          <div class="book-footer">
+            <div class="book-price">850 دج</div>
+            <button class="btn-add" onclick="event.stopPropagation();">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-card fade-in" onclick="window.location.href='details.html?id=2'">
+        <div class="book-cover" style="background:linear-gradient(135deg,#1a0a00,#c8a84b);">
+          <img src="book4.jfif" alt="">
+          <span class="book-badge new">جديد</span>
+        </div>
+        <div class="book-info">
+          <div class="book-category">سجادات صلاة</div>
+          <div class="book-title">الداء والدواء</div>
+          <div class="book-author">ابن القيم الجوزية رحمه الله</div>
+          <div class="book-footer">
+            <div class="book-price">650 دج <span class="old">800 دج</span></div>
+            <button class="btn-add" onclick="event.stopPropagation();">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-card fade-in" onclick="window.location.href='details.html?id=3'">
+        <div class="book-cover" style="background:linear-gradient(135deg,#0a1a00,#2d5a16);">
+          <img src="book13.jfif" alt="">
+          <span class="book-badge">مميز</span>
+        </div>
+        <div class="book-info">
+          <div class="book-category">العقيدة والتوحيد</div>
+          <div class="book-title">مدارج السالكين بين منازل إياك نعبد</div>
+          <div class="book-author">ابن القيم الجوزية رحمه الله</div>
+          <div class="book-footer">
+            <div class="book-price">1200 دج</div>
+            <button class="btn-add" onclick="event.stopPropagation();">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-card fade-in" onclick="window.location.href='details.html?id=4'">
+        <div class="book-cover" style="background:linear-gradient(135deg,#00153d,#004080);">
+        <img src="book2.jfif" alt="">
+          <span class="book-badge new">جديد</span>
+        </div>
+        <div class="book-info">
+          <div class="book-category">السيرة النبوية</div>
+          <div class="book-title">زاد المعاد في هدي خير العباد</div>
+          <div class="book-author">ابن القيم الجوزية رحمه الله</div>
+          <div class="book-footer">
+            <div class="book-price">1500 دج <span class="old">1800 دج</span></div>
+            <button class="btn-add" onclick="event.stopPropagation();">+</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- PROMO BANNERS -->
+<div class="promo-section fade-in" id="offers">
+  <div class="promo-grid">
+    <div class="promo-card">
+      <div class="promo-card-bg"></div>
+      <div class="promo-pattern"></div>
+      <div class="promo-content">
+        <span class="promo-tag"> عرض محدود</span>
+        <h3 class="promo-title">خصم 15% على كتب ابن القيم</h3>
+        <p class="promo-sub">اغتنم الفرصة واقتنِ أفضل المؤلفات بأسعار مخفضة</p>
+        <a href="#featured" class="btn-promo">تسوق الآن ←</a>
+      </div>
+      <div class="promo-emoji"></div>
+    </div>
+    <div class="promo-card">
+      <div class="promo-card-bg gold"></div>
+      <div class="promo-pattern"></div>
+      <div class="promo-content">
+        <span class="promo-tag"> توصيل سريع</span>
+        <h3 class="promo-title">التوصيل لجميع الولايات</h3>
+        <p class="promo-sub">نصل إليك في كل أنحاء الجزائر 🇩🇿</p>
+        <a href="#instagram" class="btn-promo">اطلب الآن ←</a>
+      </div>
+      <div class="promo-emoji">🗺️</div>
+    </div>
+  </div>
+</div>
+
+<!-- DELIVERY FEATURES -->
+<div class="delivery-section">
+  <div class="delivery-inner">
+    <div class="delivery-grid">
+      <div class="delivery-item fade-in">
+        <div class="delivery-icon"></div>
+        <div class="delivery-title">توصيل لجميع الولايات</div>
+        <div class="delivery-desc">نغطي جميع ولايات الجزائر الـ 58 بكل سهولة ويسر</div>
+      </div>
+      <div class="delivery-item fade-in">
+        <div class="delivery-icon"></div>
+        <div class="delivery-title">كتب أصيلة مضمونة</div>
+        <div class="delivery-desc">جميع الكتب من دور نشر موثوقة وبجودة عالية</div>
+      </div>
+      <div class="delivery-item fade-in">
+        <div class="delivery-icon"></div>
+        <div class="delivery-title">دعم على مدار الساعة</div>
+        <div class="delivery-desc">تواصل معنا عبر إنستغرام أو تيكتوك في أي وقت</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INSTAGRAM SECTION -->
+<div id="instagram">
+  <div class="section">
+    <div class="section-header fade-in">
+      <span class="eyebrow">تابعنا على إنستغرام</span>
+      <h2 class="section-title">@dar_elfallah.16</h2>
+      <div class="divider"></div>
+    </div>
+    <!-- <div class="insta-grid">
+      <div class="insta-card">
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#2c1810,#800020);display:flex;align-items:center;justify-content:center;font-size:40px;"> </div>
+        <div class="insta-hover"></div>
+      </div>
+      <div class="insta-card">
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#241b0c,#c8a84b);display:flex;align-items:center;justify-content:center;font-size:40px;"> </div>
+        <div class="insta-hover"></div>
+      </div>
+      <div class="insta-card">
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#0a1a00,#2d5a00);display:flex;align-items:center;justify-content:center;font-size:40px;"></div>
+        <div class="insta-hover"></div>
+      </div>
+      <div class="insta-card">
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#00153d,#5a0016);display:flex;align-items:center;justify-content:center;font-size:40px;"> </div>
+        <div class="insta-hover"></div>
+      </div>
+    </div> -->
+    <div style="text-align:center;margin-top:32px;">
+      <a href="https://www.instagram.com/dar_elfallah.16/" target="_blank" class="btn-primary" style="text-decoration:none;">
+          تابعنا على إنستغرام
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="name"> مكتبة الفلاح للكتب الشرعية</div>
+        <p>هنا حيث الكُتُب <br>
+        "الفلاح" متجركم لبيع الكتب الشرعية<br>
+        التوصيل داخل الجزائر فقط 🇩🇿</p>
+        <div class="footer-social">
+          <a class="social-btn" href="https://www.instagram.com/dar_elfallah.16/" target="_blank"> </a>
+          <a class="social-btn" href="#" target="_blank"></a>
+          <a class="social-btn" href="#" target="_blank"></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>التصنيفات</h4>
+        <ul>
+          <li><a href="#">القرآن وعلومه</a></li>
+          <li><a href="#">الحديث النبوي</a></li>
+          <li><a href="#">العقيدة والتوحيد</a></li>
+          <li><a href="#">الفقه وأصوله</a></li>
+          <li><a href="#">سجادات صلاة</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>روابط سريعة</h4>
+        <ul>
+          <li><a href="#">الصفحة الرئيسية</a></li>
+          <li><a href="#">الكتب المميزة</a></li>
+          <li><a href="#">العروض والتخفيضات</a></li>
+          <li><a href="#">اتصل بنا</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>معلومات التوصيل</h4>
+        <ul>
+          <li><a href="#">الجزائر العاصمة</a></li>
+          <li><a href="#">وهران</a></li>
+          <li><a href="#">قسنطينة</a></li>
+          <li><a href="#">جميع الولايات</a></li>
+          <li><a href="#">أسعار التوصيل</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 مكتبة الفلاح للكتب الشرعية • الجزائر 🇩🇿 • جميع الحقوق محفوظة</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Animation observers ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  const catObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), parseInt(entry.target.dataset.delay) || 0);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.cat-card').forEach(el => catObserver.observe(el));
+
+  // ── ESC key ──
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeClaudeCart(); closeClaudeSearch(); }
+  });
+
+  // ── CART SYSTEM ──
+  let claudeCart = JSON.parse(localStorage.getItem('bookCart')) || [];
+
+  function saveClaudeCart() {
+    localStorage.setItem('bookCart', JSON.stringify(claudeCart));
+    updateClaudeCartUI();
+  }
+
+  function updateClaudeCartUI() {
+    const count = claudeCart.reduce((s, i) => s + i.qty, 0);
+    document.querySelector('.btn-cart span').textContent = `السلة (${count})`;
+    const container = document.getElementById('claudeCartItems');
+    const footer = document.getElementById('claudeCartFooter');
+    if (!claudeCart.length) {
+      container.innerHTML = '<div class="cart-empty" style="display:flex;"><p>سلة الشراء فارغة</p></div>';
+      footer.style.display = 'none';
+      return;
+    }
+    footer.style.display = 'block';
+    let html = '';
+    let total = 0;
+    claudeCart.forEach((item, idx) => {
+      total += item.price * item.qty;
+      const imgHtml = item.image ? `<img src="${item.image}" alt="${item.title}">` : '';
+      html += `<div class="cart-item">
+        <div class="cart-item-img">${imgHtml}</div>
+        <div class="cart-item-info">
+          <div class="cart-item-title">${item.title}</div>
+          <div class="cart-item-price">${item.price} دج</div>
+        </div>
+        <div class="cart-item-qty">
+          <button onclick="claudeCartQty(${idx},-1)">−</button>
+          <span>${item.qty}</span>
+          <button onclick="claudeCartQty(${idx},1)">+</button>
+        </div>
+        <button class="cart-item-remove" onclick="claudeCartRemove(${idx})">✕</button>
+      </div>`;
+    });
+    container.innerHTML = html;
+    document.getElementById('claudeCartTotal').textContent = total + ' دج';
+  }
+
+  function claudeCartQty(idx, delta) {
+    claudeCart[idx].qty = Math.max(1, claudeCart[idx].qty + delta);
+    saveClaudeCart();
+  }
+
+  function claudeCartRemove(idx) {
+    claudeCart.splice(idx, 1);
+    saveClaudeCart();
+  }
+
+  function claudeAddToCart(btn, id, title, price, image) {
+    const idx = claudeCart.findIndex(i => i.id === id);
+    if (idx > -1) {
+      claudeCart[idx].qty += 1;
+    } else {
+      claudeCart.push({ id, title, price, qty: 1, image });
+    }
+    saveClaudeCart();
+    btn.textContent = '✓';
+    btn.style.background = '#28a745';
+    showClaudeToast('تمت الإضافة');
+    setTimeout(() => { btn.textContent = '+'; btn.style.background = ''; }, 1500);
+  }
+
+  function claudeCheckout() {
+    let msg = 'السلام عليكم، أريد طلب:\n';
+    claudeCart.forEach(i => { msg += `- ${i.title} × ${i.qty} = ${i.price * i.qty} دج\n`; });
+    const total = claudeCart.reduce((s, i) => s + i.price * i.qty, 0);
+    msg += `\nالمجموع: ${total} دج`;
+    window.open(`https://wa.me/213000000000?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+
+  function closeClaudeCart() {
+    document.querySelector('.cart-overlay')?.classList.remove('open');
+    document.querySelector('.cart-sidebar')?.classList.remove('open');
+  }
+
+  function closeClaudeSearch() {
+    document.querySelector('.search-modal')?.classList.remove('open');
+    document.getElementById('claudeSearchResults').innerHTML = '';
+    const inp = document.getElementById('claudeSearchInput');
+    if (inp) inp.value = '';
+  }
+
+  // ── SEARCH SYSTEM ──
+  let claudeAllBooks = [];
+
+  async function loadClaudeBooks() {
+    try {
+      const res = await fetch('books.json');
+      const data = await res.json();
+      claudeAllBooks = data.books;
+      applyCategoryFilter();
+    } catch (e) { console.error(e); }
+  }
+
+  function claudeSearch(q) {
+    const container = document.getElementById('claudeSearchResults');
+    if (!q.trim()) { container.innerHTML = ''; return; }
+    const results = claudeAllBooks.filter(b => b.title.includes(q) || b.author.includes(q));
+    if (!results.length) {
+      container.innerHTML = '<p style="color:rgba(255,255,255,.4);text-align:center;padding:20px;">لا توجد نتائج</p>';
+      return;
+    }
+    let html = '';
+    results.forEach(b => {
+      const imgHtml = b.image ? `<img src="${b.image}" alt="${b.title}">` : '';
+      html += `<div class="search-result-item" onclick="window.location.href='details.html?id=${b.id}'">
+        <div class="search-result-img">${imgHtml}</div>
+        <div class="search-result-info">
+          <div class="search-result-title">${b.title}</div>
+          <div class="search-result-author">${b.author}</div>
+          <div class="search-result-price">${b.price} دج</div>
+        </div>
+      </div>`;
+    });
+    container.innerHTML = html;
+  }
+
+  // ── CATEGORY FILTERING ──
+  function applyCategoryFilter() {
+    const params = new URLSearchParams(window.location.search);
+    const cat = params.get('cat');
+    if (!cat) return;
+    const cards = document.querySelectorAll('.book-card');
+    cards.forEach(card => {
+      const catEl = card.querySelector('.book-category');
+      if (catEl && catEl.textContent.trim() === cat) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    const heading = document.querySelector('#featured .section-title');
+    if (heading) heading.innerHTML = `تصفية: <span>${cat}</span>`;
+  }
+
+  // ── TOAST ──
+  function showClaudeToast(msg) {
+    let t = document.getElementById('claudeToast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'claudeToast';
+      t.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:#fff;padding:14px 28px;border-radius:30px;font-size:14px;font-weight:600;z-index:500;opacity:0;transition:all .35s cubic-bezier(.22,.68,0,1.2);box-shadow:0 8px 30px rgba(36,27,12,.3);white-space:nowrap;';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.opacity = '1';
+    t.style.transform = 'translateX(-50%) translateY(0)';
+    setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(80px)'; }, 2800);
+  }
+
+  // ── Init ──
+  loadClaudeBooks();
+  applyCategoryFilter();
+  updateClaudeCartUI();
+
+  // Bind add-to-cart buttons directly (overriding inline stopPropagation)
+  document.querySelectorAll('.btn-add').forEach(btn => {
+    btn.onclick = function(e) {
+      e.stopPropagation();
+      const card = btn.closest('.book-card');
+      if (card) {
+        const title = card.querySelector('.book-title')?.textContent || '';
+        const priceText = card.querySelector('.book-price')?.textContent || '0';
+        const price = parseInt(priceText) || 0;
+        const img = card.querySelector('img')?.getAttribute('src') || '';
+        const id = card.getAttribute('onclick')?.match(/id=(\d+)/)?.[1] || Date.now();
+        claudeAddToCart(btn, parseInt(id), title, price, img);
+      }
+    };
+  });
+
+  // Open cart from Alpine
+  document.querySelector('.btn-cart').addEventListener('click', function() {
+    document.querySelector('.cart-overlay')?.classList.add('open');
+    document.querySelector('.cart-sidebar')?.classList.add('open');
+  });
+
+  document.querySelector('.cart-overlay')?.addEventListener('click', closeClaudeCart);
+</script>
+</body>
+</html>

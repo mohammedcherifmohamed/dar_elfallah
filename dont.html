@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>دار الفلاح للكتب | كتاب cycle dz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* custom colors & animations */
+    :root {
+      --brown-dark: #3b2a1a;
+      --brown-mid: #5a3e2b;
+      --brown-light: #8b6b4c;
+      --purple-deep: #4a1a4a;
+      --purple-soft: #7a3b7a;
+      --gold-accent: #c9a87c;
+    }
+    body {
+      background: #f9f4ed;
+      font-family: 'Segoe UI', 'Tahoma', system-ui, sans-serif;
+    }
+    .bg-brown-dark { background-color: var(--brown-dark); }
+    .bg-brown-mid { background-color: var(--brown-mid); }
+    .bg-brown-light { background-color: var(--brown-light); }
+    .bg-purple-deep { background-color: var(--purple-deep); }
+    .bg-purple-soft { background-color: var(--purple-soft); }
+    .text-gold { color: var(--gold-accent); }
+    .border-gold { border-color: var(--gold-accent); }
+
+    /* card hover & animation */
+    .category-card {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      background: white;
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      overflow: hidden;
+      transform: translateY(0);
+    }
+    .category-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(90, 0, 22, 0.25);
+      border-color: var(--purple-deep);
+    }
+    .category-card img {
+      transition: transform 0.6s ease;
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .category-card:hover img {
+      transform: scale(1.08);
+    }
+    .category-card .card-overlay {
+      background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(245,235,220,0.95));
+      backdrop-filter: blur(2px);
+    }
+    .btn-purple {
+      background: var(--purple-deep);
+      color: white;
+      transition: 0.3s;
+    }
+    .btn-purple:hover {
+      background: var(--purple-soft);
+      box-shadow: 0 8px 16px rgba(74, 26, 74, 0.3);
+      transform: scale(0.97);
+    }
+    .btn-brown {
+      background: var(--brown-mid);
+      color: #fefcf7;
+      transition: 0.3s;
+    }
+    .btn-brown:hover {
+      background: var(--brown-dark);
+      box-shadow: 0 8px 16px rgba(59, 42, 26, 0.3);
+    }
+    .hero-gradient {
+      background: linear-gradient(135deg, #3b2a1a 0%, #5a3e2b 40%, #4a1a4a 100%);
+    }
+    .glass-card {
+      background: rgba(255, 248, 240, 0.85);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(201, 168, 124, 0.3);
+    }
+    .social-icon {
+      transition: 0.2s;
+      color: #b8a089;
+    }
+    .social-icon:hover {
+      color: var(--gold-accent);
+      transform: translateY(-3px);
+    }
+    /* flicker animation for category titles */
+    @keyframes softGlow {
+      0% { text-shadow: 0 0 0px rgba(74,26,74,0.2); }
+      50% { text-shadow: 0 0 12px rgba(74,26,74,0.3); }
+      100% { text-shadow: 0 0 0px rgba(74,26,74,0.2); }
+    }
+    .animate-glow {
+      animation: softGlow 3s infinite ease-in-out;
+    }
+    /* small badge */
+    .badge-gold {
+      background: var(--gold-accent);
+      color: #2f1f0f;
+    }
+    /* responsive */
+    @media (max-width: 640px) {
+      .category-card img {
+        height: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Main container -->
+  <div class="max-w-6xl mx-auto px-4 py-6">
+
+    <!-- Header: profile card style (inspired by dar_elfallah) -->
+    <div class="hero-gradient rounded-3xl p-6 md:p-8 text-white shadow-2xl mb-10 relative overflow-hidden">
+      <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDQwIDQwIj48cGF0aCBkPSJNMjAgM0wxIDM3bDM4IDB6IiBmaWxsPSIjZmZmIi8+PC9zdmc+')]"></div>
+      <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-6">
+        <div class="flex items-center gap-4">
+          <div class="w-20 h-20 rounded-full bg-gold-accent flex items-center justify-center text-3xl font-bold text-brown-dark shadow-lg border-4 border-white/30">📚</div>
+          <div>
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-wide">دار الفلاح <span class="text-gold">للكتب</span></h1>
+            <div class="flex flex-wrap items-center gap-3 mt-1 text-sm text-white/80">
+              <span><i class="fas fa-book-open mr-1"></i> 213 منشور</span>
+              <span><i class="fas fa-users mr-1"></i> 26.5K متابع</span>
+              <span><i class="fas fa-user-plus mr-1"></i> 7 متابَع</span>
+            </div>
+          </div>
+        </div>
+        <div class="md:mr-auto flex flex-wrap gap-3 items-center">
+          <span class="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm border border-white/20"><i class="fas fa-truck mr-2"></i> التوصيل داخل الجزائر</span>
+          <a href="#" class="bg-gold-accent text-brown-dark px-5 py-2 rounded-full font-bold shadow-md hover:bg-amber-300 transition flex items-center gap-2 text-sm"><i class="fas fa-paper-plane"></i> متابعة</a>
+          <a href="#" class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30 hover:bg-white/20 transition text-sm"><i class="fas fa-envelope"></i> راسلنا</a>
+        </div>
+      </div>
+      <!-- tiktok link & extra -->
+      <div class="relative z-10 mt-4 flex flex-wrap items-center gap-4 text-sm text-white/70 border-t border-white/10 pt-3">
+        <span><i class="fab fa-tiktok mr-1"></i> @dar_elfallah</span>
+        <span class="hidden md:inline">|</span>
+        <span><i class="fas fa-tag mr-1"></i> أمور ثانوية · أزالة العائلة · كتب outdoor</span>
+        <a href="#" class="text-gold hover:text-amber-200 transition"><i class="fas fa-arrow-left mr-1"></i> الفلاح</a>
+        <span class="bg-gold-accent/20 text-gold px-2 py-0.5 rounded-full text-xs">فوائد</span>
+        <span class="bg-white/10 px-3 py-0.5 rounded-full text-xs"><i class="fas fa-box"></i> أسعار التوصيل</span>
+      </div>
+    </div>
+
+    <!-- Book Cycle DZ promo banner (clone style) -->
+    <div class="bg-gradient-to-r from-[#5a0016] to-[#800020] rounded-2xl p-5 mb-10 shadow-xl flex flex-wrap items-center justify-between text-white border border-[#c9a87c]/30">
+      <div class="flex items-center gap-3">
+        <i class="fas fa-sync-alt text-3xl text-gold animate-spin-slow" style="animation-duration: 8s;"></i>
+        <div>
+          <h2 class="text-xl font-bold"><span class="text-gold">BOOK CYCLE</span> DZ</h2>
+          <p class="text-sm opacity-80">اكتشف عالم الكتب المستعملة بأفضل الأسعار!</p>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-4 mt-2 md:mt-0">
+        <span class="bg-white/10 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/20 text-sm"><i class="fas fa-percent mr-1 text-gold"></i> خصم 15% على دار لليمة</span>
+        <span class="bg-white/10 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/20 text-sm"><i class="fas fa-percent mr-1 text-gold"></i> وفر 25% على كتب القانون</span>
+        <a href="#" class="bg-gold-accent text-[#5a0016] px-5 py-2 rounded-full font-bold shadow-lg hover:bg-amber-300 transition text-sm flex items-center gap-1"><i class="fas fa-shopping-bag"></i> تسوق الآن</a>
+        <a href="#" class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30 hover:bg-white/20 transition text-sm flex items-center gap-1"><i class="fas fa-cart-plus"></i> تسوق الآن</a>
+      </div>
+      <div class="w-full mt-2 text-xs opacity-60 flex justify-end items-center gap-2">
+        <i class="fas fa-envelope"></i> www.bookcycledz.com
+      </div>
+    </div>
+
+    <!-- Categories with animation & pictures (clone of modern book shop) -->
+    <div class="mb-6">
+      <h3 class="text-2xl font-bold text-brown-dark flex items-center gap-3 mb-5 border-r-4 border-purple-deep pr-4">
+        <i class="fas fa-th-large text-purple-deep"></i> 
+        <span class="animate-glow">أقسام الكتب</span>
+        <span class="text-sm font-normal text-brown-light mr-2">— اختر ما يروق لك</span>
+      </h3>
+    </div>
+
+    <!-- Grid of categories with images / icons (using placeholder images + FontAwesome) -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
+
+      <!-- Card 1: الفلاح -->
+      <div class="category-card border-2 border-transparent hover:border-purple-soft">
+        <div class="relative overflow-hidden">
+          <img src="https://placecats.com/400/300?random=1" alt="كتب الفلاح" class="w-full h-44 object-cover">
+          <div class="absolute top-2 left-2 bg-purple-deep/80 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm"><i class="fas fa-star"></i> الأكثر</div>
+        </div>
+        <div class="card-overlay p-4 text-center">
+          <h4 class="font-bold text-lg text-brown-dark"><i class="fas fa-book text-purple-soft ml-1"></i> الفلاح</h4>
+          <p class="text-xs text-brown-light">كتب دينية · تراث</p>
+          <div class="flex justify-center gap-3 mt-2">
+            <span class="bg-brown-dark/10 px-3 py-1 rounded-full text-xs">📖 120+</span>
+            <a href="#" class="text-purple-deep text-sm font-semibold hover:underline">تصفح <i class="fas fa-arrow-left mr-1"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: كتب outdoor -->
+      <div class="category-card border-2 border-transparent hover:border-purple-soft">
+        <div class="relative overflow-hidden">
+          <img src="https://placecats.com/400/300?random=2" alt="outdoor books" class="w-full h-44 object-cover">
+          <div class="absolute top-2 left-2 bg-brown-mid/80 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm"><i class="fas fa-tree"></i> طبيعة</div>
+        </div>
+        <div class="card-overlay p-4 text-center">
+          <h4 class="font-bold text-lg text-brown-dark"><i class="fas fa-mountain text-brown-light ml-1"></i> outdoor</h4>
+          <p class="text-xs text-brown-light">مغامرات · سفر</p>
+          <div class="flex justify-center gap-3 mt-2">
+            <span class="bg-brown-dark/10 px-3 py-1 rounded-full text-xs">🏕️ 45+</span>
+            <a href="#" class="text-purple-deep text-sm font-semibold hover:underline">تصفح <i class="fas fa-arrow-left mr-1"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: أزالة العائلة (family) -->
+      <div class="category-card border-2 border-transparent hover:border-purple-soft">
+        <div class="relative overflow-hidden">
+          <img src="https://placecats.com/400/300?random=3" alt="family books" class="w-full h-44 object-cover">
+          <div class="absolute top-2 left-2 bg-[#800020]/80 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm"><i class="fas fa-heart"></i> عائلة</div>
+        </div>
+        <div class="card-overlay p-4 text-center">
+          <h4 class="font-bold text-lg text-brown-dark"><i class="fas fa-users text-[#800020] ml-1"></i> أزالة العائلة</h4>
+          <p class="text-xs text-brown-light">تربية · مجتمع</p>
+          <div class="flex justify-center gap-3 mt-2">
+            <span class="bg-brown-dark/10 px-3 py-1 rounded-full text-xs">👨‍👩‍👧 30+</span>
+            <a href="#" class="text-purple-deep text-sm font-semibold hover:underline">تصفح <i class="fas fa-arrow-left mr-1"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: فوائد (benefits) -->
+      <div class="category-card border-2 border-transparent hover:border-purple-soft">
+        <div class="relative overflow-hidden">
+          <img src="https://placecats.com/400/300?random=4" alt="فوائد" class="w-full h-44 object-cover">
+          <div class="absolute top-2 left-2 bg-gold-accent/80 text-brown-dark text-xs px-3 py-1 rounded-full backdrop-blur-sm"><i class="fas fa-lightbulb"></i> نصائح</div>
+        </div>
+        <div class="card-overlay p-4 text-center">
+          <h4 class="font-bold text-lg text-brown-dark"><i class="fas fa-seedling text-gold ml-1"></i> فوائد</h4>
+          <p class="text-xs text-brown-light">تنمية · إيجابية</p>
+          <div class="flex justify-center gap-3 mt-2">
+            <span class="bg-brown-dark/10 px-3 py-1 rounded-full text-xs">🌱 25+</span>
+            <a href="#" class="text-purple-deep text-sm font-semibold hover:underline">تصفح <i class="fas fa-arrow-left mr-1"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5: كتب شرعية (islamic law) -->
+      <div class="category-card border-2 border-transparent hover:border-purple-soft">
+        <div class="relative overflow-hidden">
+          <img src="https://placecats.com/400/300?random=5" alt="كتب شرعية" class="w-full h-44 object-cover">
+          <div class="absolute top-2 left-2 bg-purple-deep/80 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm"><i class="fas fa-gavel"></i> فقه</div>
+        </div>
+        <div class="card-overlay p-4 text-center">
+          <h4 class="font-bold text-lg text-brown-dark"><i class="fas fa-balance-scale text-purple-deep ml-1"></i> كتب شرعية</h4>
+          <p class="text-xs text-brown-light">أصول · فقه</p>
+          <div class="flex justify-center gap-3 mt-2">
+            <span class="bg-brown-dark/10 px-3 py-1 rounded-full text-xs">📜 80+</span>
+            <a href="#" class="text-purple-deep text-sm font-semibold hover:underline">تصفح <i class="fas fa-arrow-left mr-1"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6: كتب قانون (law) -->
+      <div class="category-card border-2 border-transparent hover:border-purple-soft">
+        <div class="relative overflow-hidden">
+          <img src="https://placecats.com/400/300?random=6" alt="قانون" class="w-full h-44 object-cover">
+          <div class="absolute top-2 left-2 bg-[#5a0016]/80 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm"><i class="fas fa-scale-balanced"></i> قانون</div>
+        </div>
+        <div class="card-overlay p-4 text-center">
+          <h4 class="font-bold text-lg text-brown-dark"><i class="fas fa-gavel text-[#5a0016] ml-1"></i> كتب القانون</h4>
+          <p class="text-xs text-brown-light">تشريع · حقوق</p>
+          <div class="flex justify-center gap-3 mt-2">
+            <span class="bg-brown-dark/10 px-3 py-1 rounded-full text-xs">⚖️ 60+</span>
+            <a href="#" class="text-purple-deep text-sm font-semibold hover:underline">تصفح <i class="fas fa-arrow-left mr-1"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 7: كتاب (general book) -->
+      <div class="category-card border-2 border-transparent hover:border-purple-soft">
+        <div class="relative overflow-hidden">
+          <img src="https://placecats.com/400/300?random=7" alt="كتاب" class="w-full h-44 object-cover">
+          <div class="absolute top-2 left-2 bg-brown-light/80 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm"><i class="fas fa-book-open"></i> عام</div>
+        </div>
+        <div class="card-overlay p-4 text-center">
+          <h4 class="font-bold text-lg text-brown-dark"><i class="fas fa-book text-brown-light ml-1"></i> كتاب</h4>
+          <p class="text-xs text-brown-light">روايات · أدب</p>
+          <div class="flex justify-center gap-3 mt-2">
+            <span class="bg-brown-dark/10 px-3 py-1 rounded-full text-xs">📚 90+</span>
+            <a href="#" class="text-purple-deep text-sm font-semibold hover:underline">تصفح <i class="fas fa-arrow-left mr-1"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 8: أمور ثانوية (secondary) + extra -->
+      <div class="category-card border-2 border-transparent hover:border-purple-soft">
+        <div class="relative overflow-hidden">
+          <img src="https://placecats.com/400/300?random=8" alt="أمور ثانوية" class="w-full h-44 object-cover">
+          <div class="absolute top-2 left-2 bg-[#4a1a4a]/80 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm"><i class="fas fa-asterisk"></i> متنوع</div>
+        </div>
+        <div class="card-overlay p-4 text-center">
+          <h4 class="font-bold text-lg text-brown-dark"><i class="fas fa-ellipsis-h text-purple-soft ml-1"></i> أمور ثانوية</h4>
+          <p class="text-xs text-brown-light">متفرقات · ثقافة</p>
+          <div class="flex justify-center gap-3 mt-2">
+            <span class="bg-brown-dark/10 px-3 py-1 rounded-full text-xs">🧩 35+</span>
+            <a href="#" class="text-purple-deep text-sm font-semibold hover:underline">تصفح <i class="fas fa-arrow-left mr-1"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer / social + extra info -->
+    <div class="border-t border-brown-light/20 pt-6 mt-4 text-sm text-brown-dark/70 flex flex-wrap justify-between items-center">
+      <div class="flex gap-4">
+        <a href="#" class="social-icon"><i class="fab fa-tiktok text-xl"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-instagram text-xl"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-twitter text-xl"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-facebook text-xl"></i></a>
+      </div>
+      <div class="flex gap-4 text-xs">
+        <span><i class="fas fa-tag"></i> #الفلاح</span>
+        <span><i class="fas fa-truck"></i> التوصيل داخل الجزائر</span>
+        <span class="hidden sm:inline"><i class="fas fa-phone"></i> +213 55 12 34 56</span>
+      </div>
+      <div class="text-xs text-brown-light/60">
+        <i class="far fa-copyright"></i> دار الفلاح للكتب الشرعية
+      </div>
+    </div>
+
+    <!-- tiny note: مستوحى من الصفحة المعروضة -->
+    <div class="mt-3 text-center text-[10px] text-brown-light/40">
+      مستوحى من @dar_elfallah · book cycle dz · جميع الحقوق محفوظة
+    </div>
+  </div>
+
+  <!-- optional JS for hover interactions (just for extra touch) -->
+  <script>
+    (function() {
+      // simple animation: cards get a tiny pulse on load (just for fun)
+      const cards = document.querySelectorAll('.category-card');
+      cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+          card.style.transition = 'all 0.5s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 100 + index * 80);
+      });
+    })();
+  </script>
+</body>
+</html>
