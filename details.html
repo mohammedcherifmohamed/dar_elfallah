@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title id="pageTitle">إغاثة اللهفان – مكتبة الفلاح للكتب الشرعية</title>
@@ -627,8 +628,8 @@
 <div class="toast" id="toast">تمت إضافة الكتاب إلى السلة</div>
 
 <!-- CART OVERLAY -->
-<div class="cart-overlay" id="cartOverlay" onclick="closeCart()" style="opacity: 0; pointer-events: none;"></div>
-<div class="cart-sidebar" id="cartSidebar" style="transform: translateX(-100%);">
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
   <div class="cart-header">
     <h3> سلة الشراء</h3>
     <button class="btn-close" onclick="closeCart()">✕</button>
@@ -644,7 +645,7 @@
 </div>
 
 <!-- SEARCH MODAL -->
-<div class="search-modal" id="searchModal" style="opacity: 0; pointer-events: none;">
+<div class="search-modal" id="searchModal">
   <button class="search-close" onclick="closeSearch()">✕</button>
   <div class="search-box">
     <div class="search-input-wrap">
@@ -1086,13 +1087,30 @@
     window.open(`https://wa.me/213000000000?text=${encodeURIComponent(msg)}`, '_blank');
   }
 
-  function openCart() { document.getElementById('cartOverlay').classList.add('open'); document.getElementById('cartSidebar').classList.add('open'); }
-  function closeCart() { document.getElementById('cartOverlay').classList.remove('open'); document.getElementById('cartSidebar').classList.remove('open'); }
+  function openCart() {
+    document.getElementById('cartOverlay')?.classList.add('open');
+    document.getElementById('cartSidebar')?.classList.add('open');
+  }
+
+  function closeCart() {
+    document.getElementById('cartOverlay')?.classList.remove('open');
+    document.getElementById('cartSidebar')?.classList.remove('open');
+  }
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCart(); });
 
   // ── SEARCH SYSTEM ──
-  function openSearch() { document.getElementById('searchModal').classList.add('open'); setTimeout(() => document.getElementById('searchInput').focus(), 200); }
-  function closeSearch() { document.getElementById('searchModal').classList.remove('open'); document.getElementById('searchResults').innerHTML = ''; document.getElementById('searchInput').value = ''; }
+  function openSearch() {
+    document.getElementById('searchModal')?.classList.add('open');
+    setTimeout(() => document.getElementById('searchInput')?.focus(), 0);
+  }
+
+  function closeSearch() {
+    document.getElementById('searchModal')?.classList.remove('open');
+    const results = document.getElementById('searchResults');
+    const input = document.getElementById('searchInput');
+    if (results) results.innerHTML = '';
+    if (input) input.value = '';
+  }
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSearch(); });
 
   function doSearch(q) {

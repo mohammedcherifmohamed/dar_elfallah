@@ -6,6 +6,7 @@
   <title>مكتبة الفلاح للكتب الشرعية</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.3/cdn.min.js" defer></script>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <style>
     :root {
       --crimson:    #800020;
@@ -526,8 +527,8 @@
 <body>
 
 <!-- CART OVERLAY -->
-<div class="cart-overlay" onclick="closeClaudeCart()" style="opacity: 0; pointer-events: none;"></div>
-<div class="cart-sidebar" style="transform: translateX(-100%);">
+<div class="cart-overlay" onclick="closeClaudeCart()"></div>
+<div class="cart-sidebar">
   <div class="cart-header">
     <h3> سلة الشراء</h3>
     <button class="btn-close" onclick="closeClaudeCart()">✕</button>
@@ -543,7 +544,7 @@
 </div>
 
 <!-- SEARCH MODAL -->
-<div class="search-modal" style="opacity: 0; pointer-events: none;">
+<div class="search-modal">
   <button class="search-close" onclick="closeClaudeSearch()">✕</button>
   <div class="search-box">
     <div class="search-input-wrap">
@@ -571,7 +572,7 @@
       <li><a href="#instagram">تواصل معنا</a></li>
     </ul>
     <div class="nav-actions">
-      <button class="btn-search" onclick="document.querySelector('.search-modal').classList.add('open'); document.getElementById('claudeSearchInput').focus();">
+      <button class="btn-search" onclick="openClaudeSearch()">
          <span>بحث</span>
       </button>
       <button class="btn-cart">
@@ -786,17 +787,17 @@
   <div class="delivery-inner">
     <div class="delivery-grid">
       <div class="delivery-item fade-in">
-        <div class="delivery-icon"></div>
+        <div class="delivery-icon"><i class="fa-regular fa-box"></i></div>
         <div class="delivery-title">توصيل لجميع الولايات</div>
         <div class="delivery-desc">نغطي جميع ولايات الجزائر الـ 58 بكل سهولة ويسر</div>
       </div>
       <div class="delivery-item fade-in">
-        <div class="delivery-icon"></div>
+        <div class="delivery-icon"><i class="fa-solid fa-book"></i></div>
         <div class="delivery-title">كتب أصيلة مضمونة</div>
         <div class="delivery-desc">جميع الكتب من دور نشر موثوقة وبجودة عالية</div>
       </div>
       <div class="delivery-item fade-in">
-        <div class="delivery-icon"></div>
+        <div class="delivery-icon"><i class="fa-solid fa-headset"></i></div>
         <div class="delivery-title">دعم على مدار الساعة</div>
         <div class="delivery-desc">تواصل معنا عبر إنستغرام أو تيكتوك في أي وقت</div>
       </div>
@@ -986,9 +987,19 @@
     window.open(`https://wa.me/213000000000?text=${encodeURIComponent(msg)}`, '_blank');
   }
 
+  function openClaudeCart() {
+    document.querySelector('.cart-overlay')?.classList.add('open');
+    document.querySelector('.cart-sidebar')?.classList.add('open');
+  }
+
   function closeClaudeCart() {
     document.querySelector('.cart-overlay')?.classList.remove('open');
     document.querySelector('.cart-sidebar')?.classList.remove('open');
+  }
+
+  function openClaudeSearch() {
+    document.querySelector('.search-modal')?.classList.add('open');
+    setTimeout(() => document.getElementById('claudeSearchInput')?.focus(), 0);
   }
 
   function closeClaudeSearch() {
@@ -1087,11 +1098,7 @@
     };
   });
 
-  // Open cart from Alpine
-  document.querySelector('.btn-cart').addEventListener('click', function() {
-    document.querySelector('.cart-overlay')?.classList.add('open');
-    document.querySelector('.cart-sidebar')?.classList.add('open');
-  });
+  document.querySelector('.btn-cart')?.addEventListener('click', openClaudeCart);
 
   document.querySelector('.cart-overlay')?.addEventListener('click', closeClaudeCart);
 </script>
