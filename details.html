@@ -659,7 +659,7 @@
 <!-- NAVBAR -->
 <nav class="navbar">
   <div class="nav-inner">
-    <a href="claude.html" class="logo">
+    <a href="index.html" class="logo">
       <div class="logo-icon"> </div>
       <div class="logo-text">
         <div class="name">مكتبة الفلاح</div>
@@ -682,11 +682,11 @@
 <!-- BREADCRUMB -->
 <div class="breadcrumb-bar">
   <div class="breadcrumb-inner">
-    <a href="claude.html">الرئيسية</a>
+    <a href="index.html">الرئيسية</a>
     <span class="bc-sep">›</span>
-    <a href="claude.html">الكتب الشرعية</a>
+    <a href="index.html">الكتب الشرعية</a>
     <span class="bc-sep">›</span>
-    <a href="claude.html" id="bcCategoryLink">سجادات صلاة</a>
+    <a href="index.html" id="bcCategoryLink">سجادات صلاة</a>
     <span class="bc-sep">›</span>
     <span class="bc-current" id="bcCurrent">إغاثة اللهفان من مصايد الشيطان</span>
   </div>
@@ -713,7 +713,7 @@
 
   <!-- RIGHT: Info -->
   <div class="info-col">
-    <div class="book-category-tag" id="bookCategoryTag" style="cursor:pointer;" onclick="window.location.href='claude.html?cat='+encodeURIComponent(this.textContent.trim())">سجادات صلاة</div>
+    <div class="book-category-tag" id="bookCategoryTag" style="cursor:pointer;" onclick="window.location.href='index.html?cat='+encodeURIComponent(this.textContent.trim())">سجادات صلاة</div>
 
     <h1 class="book-main-title" id="bookMainTitle">إغاثة اللهفان من مصايد الشيطان</h1>
     <div class="book-subtitle" id="bookSubtitle">في بيان كيد الشيطان ومصايده وطرق النجاة منها</div>
@@ -902,7 +902,7 @@
 
       document.getElementById('bcCurrent').textContent = book.title;
       document.getElementById('bcCategoryLink').textContent = book.category;
-      document.getElementById('bcCategoryLink').href = 'claude.html?cat=' + encodeURIComponent(book.category);
+      document.getElementById('bcCategoryLink').href = 'index.html?cat=' + encodeURIComponent(book.category);
       document.getElementById('coverTitleText').textContent = book.title;
       document.getElementById('coverAuthorText').innerHTML = book.author.replace('رحمه الله', '<br>رحمه الله');
       document.getElementById('coverBadge').textContent = book.grade;
