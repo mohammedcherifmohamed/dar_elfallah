@@ -1,0 +1,66 @@
+N°	Wilaya (as written)	A domicile	Au bureau
+1	Adrar	1100	850
+2	Chlef	700	400
+3	Laghouat	800	450
+4	Oum El Bouaghi	700	450
+5	Batna	700	400
+6	Béjaïa	700	400
+7	Biskra	700	450
+8	Béchar	1000	750
+9	Blida	500	300
+10	Bouira	700	400
+11	Tamanrasset	1100	900
+12	Tébessa	800	450
+13	Tlemcen	700	450
+14	Tiaret	700	400
+15	Tizi Ouzou	700	400
+16	Alger	400	250
+17	Djelfa	750	450
+18	Jijel	700	400
+19	Sétif	700	350
+20	Saïda	700	550
+21	Skikda	700	350
+22	Sidi Bel Abbès	700	400
+23	Annaba	700	450
+24	Guelma	700	350
+25	Constantine	700	400
+26	Médéa	600	300
+27	Mostaganem	700	400
+28	M'Sila	700	350
+29	Mascara	700	450
+30	Ouargla	800	500
+31	Oran	700	400
+32	El Bayadh	900	500
+33	Illizi	1200	1100
+34	Bordj Bou Arreridj	700	350
+35	Boumerdès	600	300
+36	El Tarf	700	450
+37	Tindouf	1300	850
+38	Tissemsilt	700	400
+39	El Oued	700	550
+40	Khenchela	700	450
+41	Souk Ahras	700	400
+42	Tipaza	600	300
+43	Mila	700	400
+44	Aïn Defla	700	400
+45	Naâma	900	650
+46	Aïn Témouchent	700	450
+47	Ghardaïa	800	450
+48	Relizane	700	400
+49	Timimoun	1100	750
+51	Ouled Djellal	800	600
+52	Beni Abbes	1200	700
+53	In Salah	1000	1000
+55	Touggourt	800	550
+57	El M'Ghair	800	0
+58	El Meniaa	1000	700
+
+
+
+
+
+
+
+
+
+
