@@ -18,6 +18,10 @@
 .cart-item-row .item-title { font-size: 14px; font-weight: 700; }
 .cart-item-row .item-qty-price { font-size: 13px; color: var(--warm-gray); }
 .cart-item-row .item-total { font-size: 15px; font-weight: 700; color: var(--crimson); }
+.cart-item-row .qty-controls { display: flex; align-items: center; gap: 4px; }
+.cart-item-row .qty-controls button { width: 26px; height: 26px; border-radius: 50%; border: 1px solid #ddd; background: #fff; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+.cart-item-row .qty-controls button:hover { border-color: var(--crimson); color: var(--crimson); }
+.cart-item-row .qty-controls .qty-val { min-width: 20px; text-align: center; font-weight: 700; font-size: 14px; }
 
 .subtotal-row { display: flex; justify-content: space-between; padding: 12px 0; font-weight: 700; font-size: 16px; border-top: 1px solid #eee; margin-top: 8px; }
 
@@ -49,6 +53,8 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 
 .error-msg { color: var(--crimson); font-size: 13px; margin-top: 4px; display: none; }
 .error-msg.show { display: block; }
+.stopdesk-card:hover { border-color: var(--gold) !important; }
+@media (max-width: 600px) { #stopdeskList { grid-template-columns: 1fr !important; } }
 </style>
 @endpush
 
@@ -62,30 +68,17 @@ textarea.form-control { resize: vertical; min-height: 80px; }
     <!-- Order Summary -->
     <div class="order-summary">
         <h3> ملخص الطلب</h3>
-        @foreach($cart as $item)
-        <div class="cart-item-row">
-            <div class="item-img">
-                @if($item['image'])
-                    <img src="{{ asset('storage/' . $item['image']) }}" alt="{{ $item['title'] }}">
-                @endif
-            </div>
-            <div class="item-info">
-                <div class="item-title">{{ $item['title'] }}</div>
-                <div class="item-qty-price">{{ $item['qty'] }} × {{ number_format($item['price'], 0) }} دج</div>
-            </div>
-            <div class="item-total">{{ number_format($item['price'] * $item['qty'], 0) }} دج</div>
-        </div>
-        @endforeach
+        <div id="checkoutItems"></div>
         <div class="subtotal-row">
-            <span>المجموع الفرعي</span>
-            <span>{{ number_format($subtotal, 0) }} دج</span>
+            <span>المجموع  الكلي</span>
+            <span id="checkoutSubtotal">{{ number_format($subtotal, 0) }} دج</span>
         </div>
     </div>
 
     <!-- Delivery & Customer Info -->
     <form id="checkoutForm" method="POST" action="{{ route('checkout.submit') }}">
         @csrf
-        <input type="hidden" name="cart_data" value='{{ $cartJson }}'>
+        <input type="hidden" name="cart_data" id="cartDataInput" value='{{ $cartJson }}'>
 
         <div class="delivery-section">
             <h3> معلومات التوصيل</h3>
@@ -111,7 +104,7 @@ textarea.form-control { resize: vertical; min-height: 80px; }
                     </div>
                     <div class="delivery-option" data-type="stopdesk" onclick="selectDeliveryType(this)">
                         <span class="icon"></span>
-                        <div class="label">تسليم في المحطة</div>
+                        <div class="label">تسليم في المكتب</div>
                         <div class="price" id="stopdeskPriceLabel">— دج</div>
                     </div>
                 </div>
@@ -119,9 +112,16 @@ textarea.form-control { resize: vertical; min-height: 80px; }
                 <div class="error-msg" id="deliveryError">الرجاء اختيار نوع التوصيل</div>
             </div>
 
+            <div id="stopdeskSection" style="display:none;">
+                <label style="display:block;font-size:14px;font-weight:700;margin-bottom:10px;color:var(--ink);">المكاتب المتوفره في هذه الولايه</label>
+                <div id="stopdeskList" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"></div>
+                <input type="hidden" name="stopdesk_id" id="stopdeskId">
+                <div class="error-msg" id="stopdeskError">الرجاء اختيار مكتب التسليم</div>
+            </div>
+
             <div class="price-display">
                 <div class="row">
-                    <span>المجموع الفرعي للكتب</span>
+                    <span>المجموع  الكلي للكتب</span>
                     <span id="displaySubtotal">{{ number_format($subtotal, 0) }} دج</span>
                 </div>
                 <div class="row">
@@ -129,7 +129,7 @@ textarea.form-control { resize: vertical; min-height: 80px; }
                     <span id="displayDelivery">— دج</span>
                 </div>
                 <div class="row total">
-                    <span>المجموع الكلي</span>
+                    <span>اجمالي الدفع</span>
                     <span id="displayTotal">{{ number_format($subtotal, 0) }} دج</span>
                 </div>
             </div>
@@ -146,7 +146,7 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 
             <div class="form-group">
                 <label>رقم الهاتف <span class="text-danger">*</span></label>
-                <input type="tel" name="phone" class="form-control" required placeholder="مثال: 0555123456">
+                <input type="tel" name="phone" class="form-control" required placeholder="10 أرقام: 0555123456" oninput="validatePhone(this)" onkeypress="return /^\d$/.test(event.key)">
                 <div class="error-msg" id="phoneError">رقم الهاتف مطلوب</div>
             </div>
 
@@ -163,11 +163,123 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 </div>
 
 <script>
+let checkoutCart = {!! $cartJson !!};
+let stopdesksData = @json($stopdesks);
+
+function renderCheckoutItems() {
+    const container = document.getElementById('checkoutItems');
+    const storageUrl = '{{ asset('storage') }}';
+    let html = '';
+    checkoutCart.forEach((item, idx) => {
+        const lineTotal = item.price * item.qty;
+        const imgHtml = item.image ? `<img src="${storageUrl}/${item.image}" alt="${item.title}">` : '';
+        html += `<div class="cart-item-row">
+            <div class="item-img">${imgHtml}</div>
+            <div class="item-info">
+                <div class="item-title">${item.title}</div>
+                <div class="item-qty-price">${item.price.toLocaleString()} دج للنسخة</div>
+            </div>
+            <div class="qty-controls">
+                <button onclick="checkoutQty(${idx},-1)">−</button>
+                <span class="qty-val" id="cqty-${idx}">${item.qty}</span>
+                <button onclick="checkoutQty(${idx},1)">+</button>
+            </div>
+            <div class="item-total" id="ctotal-${idx}">${lineTotal.toLocaleString()} دج</div>
+            <button onclick="checkoutRemove(${idx})" style="background:none;border:none;cursor:pointer;color:#ccc;font-size:16px;padding:4px;flex-shrink:0;" title="حذف">✕</button>
+        </div>`;
+    });
+    container.innerHTML = html;
+}
+
+function checkoutRemove(idx) {
+    checkoutCart.splice(idx, 1);
+    if (!checkoutCart.length) {
+        window.location.href = '{{ route('home') }}';
+        return;
+    }
+function validatePhone(el) {
+    const err = document.getElementById('phoneError');
+    const v = el.value.trim();
+    if (!v) {
+        err.textContent = 'رقم الهاتف مطلوب';
+        err.classList.add('show');
+    } else if (v.length < 10) {
+        err.textContent = 'تبقى ' + (10 - v.length) + ' أرقام';
+        err.classList.add('show');
+    } else if (!/^\d{10}$/.test(v)) {
+        err.textContent = 'رقم الهاتف يجب أن يتكون من 10 أرقام';
+        err.classList.add('show');
+    } else {
+        err.classList.remove('show');
+    }
+}
+
+renderCheckoutItems();
+    updateCheckoutSummary();
+}
+
+function checkoutQty(idx, delta) {
+    checkoutCart[idx].qty = Math.max(1, checkoutCart[idx].qty + delta);
+    document.getElementById('cqty-' + idx).textContent = checkoutCart[idx].qty;
+    const lineTotal = checkoutCart[idx].price * checkoutCart[idx].qty;
+    document.getElementById('ctotal-' + idx).textContent = lineTotal.toLocaleString() + ' دج';
+    updateCheckoutSummary();
+}
+
+function updateCheckoutSummary() {
+    const subtotal = checkoutCart.reduce((s, i) => s + i.price * i.qty, 0);
+    document.getElementById('checkoutSubtotal').textContent = subtotal.toLocaleString() + ' دج';
+    document.getElementById('displaySubtotal').textContent = subtotal.toLocaleString() + ' دج';
+    document.getElementById('cartDataInput').value = JSON.stringify(checkoutCart);
+    updateDeliveryPrice();
+}
+
 function selectDeliveryType(el) {
     document.querySelectorAll('.delivery-option').forEach(o => o.classList.remove('selected'));
     el.classList.add('selected');
     document.getElementById('deliveryType').value = el.dataset.type;
     updateDeliveryPrice();
+    renderStopdesks();
+}
+
+function renderStopdesks() {
+    const section = document.getElementById('stopdeskSection');
+    const list = document.getElementById('stopdeskList');
+    const wilayaId = document.getElementById('wilayaSelect').value;
+    const deliveryType = document.getElementById('deliveryType').value;
+
+    if (deliveryType !== 'stopdesk' || !wilayaId) {
+        section.style.display = 'none';
+        document.getElementById('stopdeskId').value = '';
+        return;
+    }
+
+    const desks = stopdesksData[wilayaId] || [];
+    if (!desks.length) {
+        section.style.display = 'none';
+        document.getElementById('stopdeskId').value = '';
+        return;
+    }
+
+    section.style.display = 'block';
+    let html = '';
+    desks.forEach((d, i) => {
+        const mapsIcon = d.maps_link ? `<a href="${d.maps_link}" target="_blank" style="color:var(--crimson);font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-top:4px;">عرض على الخريطة</a>` : '';
+        html += `<div class="stopdesk-card" data-id="${d.id}" onclick="selectStopdesk(this, ${d.id})" style="padding:12px;border:2px solid #e0d6c8;border-radius:10px;cursor:pointer;transition:all .2s;">
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px;">${d.office_name}</div>
+            <div style="font-size:12px;color:var(--warm-gray);margin-bottom:2px;">${d.address}</div>
+            <div style="font-size:12px;color:var(--warm-gray);margin-bottom:2px;direction:ltr;text-align:right;">${d.phone}</div>
+            ${mapsIcon}
+        </div>`;
+    });
+    list.innerHTML = html;
+}
+
+function selectStopdesk(el, id) {
+    document.querySelectorAll('.stopdesk-card').forEach(c => c.style.borderColor = '#e0d6c8');
+    el.style.borderColor = 'var(--crimson)';
+    el.style.background = 'rgba(128,0,32,.04)';
+    document.getElementById('stopdeskId').value = id;
 }
 
 function updateDeliveryPrice() {
@@ -177,9 +289,10 @@ function updateDeliveryPrice() {
 
     if (!option.value) {
         document.getElementById('displayDelivery').textContent = '— دج';
-        document.getElementById('displayTotal').textContent = document.getElementById('displaySubtotal').textContent;
         document.getElementById('homePriceLabel').textContent = '— دج';
         document.getElementById('stopdeskPriceLabel').textContent = '— دج';
+        document.getElementById('displayTotal').textContent = document.getElementById('displaySubtotal').textContent;
+        renderStopdesks();
         return;
     }
 
@@ -191,10 +304,13 @@ function updateDeliveryPrice() {
     document.getElementById('stopdeskPriceLabel').textContent = stopdeskPrice + ' دج';
     document.getElementById('displayDelivery').textContent = price + ' دج';
 
-    const subtotal = {{ $subtotal }};
+    const subtotal = checkoutCart.reduce((s, i) => s + i.price * i.qty, 0);
     const total = subtotal + price;
     document.getElementById('displayTotal').textContent = total.toLocaleString() + ' دج';
+    renderStopdesks();
 }
+
+renderCheckoutItems();
 
 document.getElementById('checkoutForm').addEventListener('submit', function(e) {
     let valid = true;
@@ -215,7 +331,8 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
     }
 
     const phone = this.querySelector('[name="phone"]').value.trim();
-    if (!phone) {
+    if (!phone || !/^\d{10}$/.test(phone)) {
+        document.getElementById('phoneError').textContent = phone ? 'رقم الهاتف يجب أن يتكون من 10 أرقام' : 'رقم الهاتف مطلوب';
         document.getElementById('phoneError').classList.add('show');
         valid = false;
     } else {

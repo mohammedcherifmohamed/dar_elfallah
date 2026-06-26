@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(AdminUserSeeder::class);
         $this->call(WilayaSeeder::class);
+        $this->call(StopdeskSeeder::class);
 
         $cat1 = Category::create(['name' => 'سجادات صلاة', 'image_path' => null]);
         $cat2 = Category::create(['name' => 'العقيدة والتوحيد', 'image_path' => null]);

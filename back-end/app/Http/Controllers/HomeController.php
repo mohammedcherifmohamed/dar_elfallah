@@ -16,4 +16,16 @@ class HomeController extends Controller
         
         return view('home', compact('categories', 'products'));
     }
+
+    public function categoryProducts($id)
+    {
+        $category = Category::findOrFail($id);
+        $products = Product::with('category')
+            ->where('category_id', $id)
+            ->latest()
+            ->get();
+        $categories = Category::withCount('products')->get();
+
+        return view('category-products', compact('category', 'products', 'categories'));
+    }
 }

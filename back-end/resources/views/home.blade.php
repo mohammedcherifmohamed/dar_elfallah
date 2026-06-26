@@ -59,10 +59,10 @@
       <span style="display:inline-block;color:var(--crimson);font-size:13px;font-weight:700;letter-spacing:2px;margin-bottom:12px;">تصفح حسب الفئة</span>
       <div style="width:60px;height:3px;background:linear-gradient(90deg,var(--gold),var(--crimson));margin:20px auto 0;border-radius:2px;"></div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:24px;">
+    <div class="cat-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:24px;">
       @foreach($categories as $cat)
-      <a href="{{ route('home') }}#featured" style="text-decoration:none;">
-        <div style="position:relative;overflow:hidden;border-radius:12px;aspect-ratio:3/4;cursor:pointer;box-shadow:0 4px 20px rgba(36,27,12,.15);transition:transform .5s cubic-bezier(.22,.68,0,1.2),opacity .5s ease,box-shadow .3s;transform:translateY(40px);opacity:0;" class="cat-card" data-delay="{{ $loop->index * 100 }}" onmouseover="this.style.boxShadow='0 12px 40px rgba(36,27,12,.3)'" onmouseout="this.style.boxShadow='0 4px 20px rgba(36,27,12,.15)'">
+      <a href="{{ route('categories.products', $cat->id) }}" style="text-decoration:none;">
+        <div style="position:relative;overflow:hidden;border-radius:12px;aspect-ratio:3/4;cursor:pointer;box-shadow:0 4px 20px rgba(36,27,12,.15);" class="cat-card" data-delay="{{ $loop->index * 100 }}" onmouseover="this.style.boxShadow='0 12px 40px rgba(36,27,12,.3)'" onmouseout="this.style.boxShadow='0 4px 20px rgba(36,27,12,.15)'">
           @if($cat->image_path)
             <img src="{{ asset('storage/' . $cat->image_path) }}" alt="{{ $cat->name }}" style="width:100%;height:100%;object-fit:cover;filter:brightness(.7);transition:transform .5s ease;" onmouseover="this.style.transform='scale(1.07)';this.style.filter='brightness(.5)'" onmouseout="this.style.transform='scale(1)';this.style.filter='brightness(.7)'">
           @else
@@ -86,9 +86,10 @@
     <div style="text-align:center;margin-bottom:56px;" class="fade-in">
       <span style="display:inline-block;color:var(--crimson);font-size:13px;font-weight:700;letter-spacing:2px;margin-bottom:12px;">أبرز الإصدارات</span>
       <h2 style="font-family:'Amiri',serif;font-size:clamp(26px,3vw,40px);color:var(--ink);font-weight:700;line-height:1.35;">اختر ما يناسبك من <span style="color:var(--crimson);">الكتب الشرعية</span></h2>
+      <h3>والمقتنيات <span style="color:var(--crimson);">الشخصيه</span></h3>
       <div style="width:60px;height:3px;background:linear-gradient(90deg,var(--gold),var(--crimson));margin:20px auto 0;border-radius:2px;"></div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:28px;">
+    <div class="product-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:28px;">
       @forelse($products as $product)
       <div class="book-card {{ !$product->available ? 'product-unavailable' : '' }}" style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(36,27,12,.08);cursor:pointer;transition:transform .3s ease,box-shadow .3s ease;" onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 12px 32px rgba(36,27,12,.18)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 12px rgba(36,27,12,.08)'" onclick="window.location.href='{{ route('products.show', $product->id) }}'">
         <div style="position:relative;aspect-ratio:3/4;overflow:hidden;background:linear-gradient(135deg,var(--deep),var(--crimson));">
@@ -120,12 +121,15 @@
   </div>
 </div>
 
+
+
+
 <!-- DELIVERY -->
 <div style="background:var(--ink);padding:60px 0;">
   <div style="max-width:1280px;margin:0 auto;padding:0 24px;">
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:40px;text-align:center;">
       <div class="fade-in">
-        <div style="width:60px;height:60px;background:rgba(200,168,75,.15);border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:26px;border:1px solid rgba(200,168,75,.3);"><i class="fa-regular fa-box"></i></div>
+        <div style="width:60px;height:60px;background:rgba(200,168,75,.15);border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:26px;border:1px solid rgba(200,168,75,.3);"><i class="fa-solid fa-truck-fast"></i></div>
         <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:6px;">توصيل لجل  الولايات</div>
         <div style="font-size:13px;color:rgba(255,255,255,.5);">نغطي  جل ولايات الجزائر الـ 55 بكل سهولة ويسر</div>
       </div>
@@ -143,17 +147,69 @@
   </div>
 </div>
 
+<!-- INSTAGRAM SECTION -->
+<div id="instagram">
+  <div class="section">
+    <div class="section-header fade-in">
+      <span class="eyebrow">تابعنا على إنستغرام</span>
+      <h2 class="section-title">  @jass.books</h2>
+      <div class="divider"></div>
+    </div>
+ 
+    <div style="text-align:center;margin-top:32px;">
+      <a href="https://www.instagram.com/jass.books/" target="_blank" class="btn-primary" style="text-decoration:none;">
+          تابعنا على إنستغرام
+      </a>
+    </div>
+  </div>
+</div>
+
 <style>
-@keyframes marqueeRTL {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-.cat-card { transition: transform .5s cubic-bezier(.22,.68,0,1.2), opacity .5s ease, box-shadow .3s; }
-.cat-card.visible { transform: translateY(0); opacity: 1; }
-.cat-card:hover .cat-count { opacity: 1; transform: translateY(0); }
-.product-unavailable { opacity: .55; filter: grayscale(.7); pointer-events: none; }
-.product-unavailable .btn-add { display: none; }
-.unavailable-badge { position: absolute; top: 10px; right: 10px; background: #666; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; z-index: 2; }
+  .insta-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .insta-card {
+      aspect-ratio: 1; border-radius: 10px; overflow: hidden;
+      background: var(--parchment); position: relative;
+      cursor: pointer;
+    }
+    .insta-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+    .insta-card:hover img { transform: scale(1.1); }
+    .insta-hover {
+      position: absolute; inset: 0; background: rgba(90,0,22,.6);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .3s; font-size: 24px;
+    }
+    .insta-card:hover .insta-hover { opacity: 1; }
+  @keyframes marqueeRTL {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .cat-card { transform: translateY(40px); opacity: 0; transition: transform .5s cubic-bezier(.22,.68,0,1.2), opacity .5s ease, box-shadow .3s; }
+  .cat-card.visible { transform: translateY(0); opacity: 1; }
+  .cat-card:hover .cat-count { opacity: 1; transform: translateY(0); }
+  .product-unavailable { opacity: .55; filter: grayscale(.7); pointer-events: none; }
+  .product-unavailable .btn-add { display: none; }
+  .unavailable-badge { position: absolute; top: 10px; right: 10px; background: #666; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; z-index: 2; }
+  @media (max-width: 600px) {
+    .product-grid { grid-template-columns: repeat(2,1fr) !important; gap: 12px !important; }
+    .cat-grid { grid-template-columns: repeat(2,1fr) !important; gap: 12px !important; }
+  }
+  .eyebrow {
+    display: inline-block; color: var(--crimson); font-size: 13px;
+    font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .btn-primary {
+    background: var(--gold); color: var(--ink);
+    padding: 14px 32px; border-radius: 6px;
+    font-family: 'Cairo', sans-serif; font-size: 15px; font-weight: 700;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: all .25s; display: inline-flex; align-items: center; gap: 8px;
+    box-shadow: 0 4px 20px rgba(200,168,75,.4);
+  }
+  .btn-primary:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(200,168,75,.5); }
 </style>
 
 <script>

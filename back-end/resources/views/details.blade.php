@@ -232,7 +232,7 @@
 @endif
     <div class="price-block">
       <div class="price-label">السعر</div>
-      <div class="price-current">{{ number_format($product->price, 0) }} <span style="font-size:18px;font-weight:400;">دج</span></div>
+      <div class="price-current" id="priceDisplay" data-base-price="{{ $product->price }}">{{ number_format($product->price, 0) }} <span style="font-size:18px;font-weight:400;">دج</span></div>
       <div class="price-note">السعر يشمل التغليف • التوصيل يُحسب عند الطلب</div>
     </div>
 
@@ -269,7 +269,7 @@
 <div class="related-section">
   <div class="related-inner">
     <div class="section-header">
-      <div class="section-title">كتب مشابهة</div>
+      <div class="section-title">منتجات مشابهة</div>
       <div class="divider"></div>
     </div>
     <div class="related-grid">
@@ -349,7 +349,7 @@ function orderWhatsApp() {
     qty: qty,
     image: '{{ $product->image_path }}'
   }]);
-  const encoded = btoa(cartData);
+  const encoded = utf8ToB64(cartData);
   window.location.href = '{{ route('checkout.index') }}?cart=' + encodeURIComponent(encoded);
 }
 </script>

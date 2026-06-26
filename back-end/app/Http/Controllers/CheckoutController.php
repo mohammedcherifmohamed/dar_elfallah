@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Stopdesk;
 use App\Models\Wilaya;
 use Illuminate\Http\Request;
 
@@ -35,8 +36,9 @@ class CheckoutController extends Controller
         }
 
         $cartJson = json_encode($cart);
+        $stopdesks = Stopdesk::all()->groupBy('wilaya_id');
 
-        return view('checkout', compact('cart', 'wilayas', 'subtotal', 'cartJson'));
+        return view('checkout', compact('cart', 'wilayas', 'subtotal', 'cartJson', 'stopdesks'));
     }
 
     public function getDeliveryPrice(Request $request)
@@ -60,6 +62,7 @@ class CheckoutController extends Controller
             'phone' => 'required|string|max:20',
             'note' => 'nullable|string|max:500',
             'cart_data' => 'required|json',
+            'stopdesk_id' => 'nullable|exists:stopdesks,id',
         ], [
             'wilaya_id.required' => 'الرجاء اختيار الولاية',
             'delivery_type.required' => 'الرجاء اختيار نوع التوصيل',
@@ -95,6 +98,14 @@ class CheckoutController extends Controller
         $msg .= "\nالهاتف: {$request->phone}";
         $msg .= "\nالولاية: {$wilaya->name}";
         $msg .= "\nنوع التوصيل: {$deliveryTypeText}";
+        if ($request->delivery_type === 'stopdesk' && $request->stopdesk_id) {
+            $sd = Stopdesk::find($request->stopdesk_id);
+            if ($sd) {
+                $msg .= "\nمكتب التسليم: {$sd->office_name}";
+                $msg .= "\nالعنوان: {$sd->address}";
+                $msg .= "\nهاتف المكتب: {$sd->phone}";
+            }
+        }
         if ($request->note) $msg .= "\nملاحظة: {$request->note}";
 
         $phone = "213552631891";

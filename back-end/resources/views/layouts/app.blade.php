@@ -9,6 +9,28 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <style>
+    
+    /* ─── SECTION COMMON ─── */
+    .section { max-width: 1280px; margin: 0 auto; padding: 80px 24px; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .eyebrow {
+      display: inline-block; color: var(--crimson); font-size: 13px;
+      font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Amiri', serif; font-size: clamp(26px, 3vw, 40px);
+      color: var(--ink); font-weight: 700; line-height: 1.35;
+    }
+    .section-title span { color: var(--crimson); }
+    .divider {
+      width: 60px; height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--crimson));
+      margin: 20px auto 0;
+      border-radius: 2px;
+    }
+
+    
     :root {
       --crimson:    #800020;
       --deep:       #5a0016;
@@ -168,8 +190,9 @@
     .social-btn {
       width: 36px; height: 36px; border-radius: 50%;
       background: rgba(255,255,255,.08);
+            color: #fff; font-size: 14px; text-decoration: none;
+
       display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 14px; text-decoration: none;
       transition: background .2s;
     }
     .social-btn:hover { background: var(--gold); color: var(--ink); }
@@ -184,9 +207,22 @@
     }
     .fade-in { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .wa-float {
+      position: fixed; bottom: 24px; right: 24px; z-index: 999;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #25d366; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; box-shadow: 0 4px 16px rgba(37,211,102,.4);
+      text-decoration: none; transition: all .25s;
+    }
+    .wa-float:hover { transform: scale(1.1); box-shadow: 0 6px 24px rgba(37,211,102,.55); }
     @media (max-width: 768px) {
       .footer-grid { grid-template-columns: 1fr 1fr; }
       .nav-links { display: none; }
+    }
+    @media (max-width: 600px) {
+      .hero { min-height: 420px !important; }
+      .wa-float { width: 48px; height: 48px; font-size: 22px; bottom: 16px; left: 16px; }
     }
   </style>
   @stack('styles')
@@ -251,6 +287,8 @@
 
 @yield('content')
 
+<a class="wa-float" href="https://wa.me/213552631891" target="_blank" title="تواصل معنا عبر واتساب"><i class="fa-brands fa-whatsapp" style="color: rgb(0, 0, 0);"></i></a>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
@@ -258,16 +296,22 @@
       <div class="footer-brand">
         <div class="name"> jass.books للكتب الشرعية</div>
         <p>هنا حيث الكُتُب<br>
-        "الفلاح" متجركم لبيع الكتب الشرعية<br>
+        "jass.books" متجركم لبيع الكتب الشرعية<br>
         التوصيل داخل الجزائر فقط 🇩🇿</p>
         <div class="footer-social">
-          <a class="social-btn" href="https://www.instagram.com/dar_elfallah.16/" target="_blank"> </a>
+          <a class="social-btn  " href="https://www.facebook.com/jass.books?utm_source=ig&utm_medium=social&utm_content=link_in_bio#" target="_blank"><i class="fa-brands fa-facebook" style="color:  rgb(24, 119, 242);"></i> </a>
+          <a class="social-btn" href="https://www.instagram.com/jass.books/" target="_blank"><i class="fa-brands fa-instagram" style="color: rgb(150, 14, 74);"></i> </a>
+          <a class="social-btn " style="color: #25D366;" href="https://wa.me/213552631891" target="_blank"><i class="fa-brands fa-whatsapp"></i> </a>
         </div>
+       
       </div>
       <div class="footer-col">
         <h4>التصنيفات</h4>
         <ul>
           <li><a href="{{ route('home') }}#categories">جميع التصنيفات</a></li>
+          @foreach(\App\Models\Category::all() as $cat)
+          <li><a href="{{ route('categories.products', $cat->id) }}">{{ $cat->name }}</a></li>
+          @endforeach
         </ul>
       </div>
       <div class="footer-col">
@@ -294,6 +338,10 @@
   let cart = JSON.parse(localStorage.getItem('bookCart')) || [];
   let allBooks = [];
 
+  function utf8ToB64(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+
   function saveCart() {
     localStorage.setItem('bookCart', JSON.stringify(cart));
     updateCartUI();
@@ -319,7 +367,7 @@
         <div class="cart-item-img">${imgHtml}</div>
         <div class="cart-item-info">
           <div class="cart-item-title">${item.title}</div>
-          <div class="cart-item-price">${item.price} دج</div>
+          <div class="cart-item-price">${item.price * item.qty} دج</div>
         </div>
         <div class="cart-item-qty">
           <button onclick="cartQty(${idx},-1)">−</button>
@@ -359,7 +407,7 @@
 
   function checkout() {
     if (!cart.length) return;
-    const data = btoa(JSON.stringify(cart));
+    const data = utf8ToB64(JSON.stringify(cart));
     window.location.href = '{{ route('checkout.index') }}?cart=' + encodeURIComponent(data);
   }
 
